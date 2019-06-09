@@ -149,7 +149,12 @@ CELERY_TASK_DEFAULT_QUEUE = 'priority.high'
 # TELEGRAM
 TELEGRAM_TOKEN = "612990444:AAHG8A7NdpuBgnPKFCMhK19CmXwKMxw4qEs"  # Sobreescribir en local_settings
 TELEGRAM_GRUPO_LOG = 0
+TELEGRAM_GRUPO_GENERAL = 0
 
+
+SNIFFER_SERIE_PUERTO = "/dev/ttyUSB0"
+SNIFFER_SERIE_BAUDRATE = 115200
+SNIFFER_TIMEOUT_SENAL = 15 * 60  # segundos que tienen que pasar para dar un dispositivo por desconectado
 
 try:
     from .local_settings import *

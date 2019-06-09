@@ -12,5 +12,6 @@ class Command(BaseCommand):
         try:
             sniffer.run()
         except KeyboardInterrupt:
+            sniffer.stop()
             print("Sniffer detenido")
             quit(0)

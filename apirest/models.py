@@ -1,4 +1,5 @@
 from django.db import models
+from cutreronte.models import Dispositivo
 
 class Prueba(models.Model):
     nombre = models.CharField(max_length=100)
@@ -16,9 +17,9 @@ class RegistroMac(models.Model):
         (DENTRO, 'Dentro'),
     ]
 
-    mac = models.CharField(max_length=30)
+    dispositivo = models.ForeignKey(Dispositivo, on_delete=models.CASCADE)
     estado = models.IntegerField(choices=ESTADO, default=DENTRO)
     tiempo = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.mac
+        return self.dispositivo.mac
