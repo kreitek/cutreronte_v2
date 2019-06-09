@@ -30,13 +30,13 @@ def debug_task(self):
 #     print("hola")
 
 app.conf.beat_schedule = {
-    # 'prueba': {
-    #     'task': 'telegramapp.tasks.cutretelegram_enviar_mensaje',
-    #     'schedule': crontab(hour="*", minute="*", day_of_week="1-5"),
-    #     'args': ("uno dos", '46167421'),
-    # },
     'borrar-registro-macs-antiguas': {
-        'task': 'common.tasks.borrar_registros_antiguos',
+        'task': 'apirest.tasks.borrar_registros_antiguos',
         'schedule': crontab(hour="4", minute="0", day_of_week="*"),
+        # 'args': ("uno dos", '46167421'),
+    },
+    'expulsar-gente-noche': {
+        'task': 'cutreronte.tasks.expulsar_gente_noche',
+        'schedule': crontab(hour="1", minute="0", day_of_week="*"),
     },
 }

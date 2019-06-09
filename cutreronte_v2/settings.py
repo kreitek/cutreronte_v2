@@ -147,7 +147,7 @@ CELERY_TASK_DEFAULT_QUEUE = 'priority.high'
 
 # TELEGRAM
 TELEGRAM_TOKEN = "612990444:AAHG8A7NdpuBgnPKFCMhK19CmXwKMxw4qEs"  # Sobreescribir en local_settings
-
+TELEGRAM_GRUPO_LOG = 0
 
 
 try:
