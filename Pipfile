@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+Django = ">=2"
+django-crispy-forms = "*"
+djangorestframework = "*"
+python-telegram-bot = ">=7.0.1"
+celery = "*"
+redis = "*"
+gunicorn = "*"
+psycopg2-binary = "*"
+
+[requires]
+python_version = "3.5"
