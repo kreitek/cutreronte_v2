@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'apirest',
     'cutreronte',
     'telegramapp',
+    'sniffer',
 
 ]
 
