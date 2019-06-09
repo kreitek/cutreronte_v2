@@ -3,8 +3,7 @@ from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
-from telegramapp.tasks import cutretelegram_enviar_mensaje
-
+from telegramapp.utils import cutretelegram_enviar_mensaje
 
 
 class Sitio(models.Model):
@@ -24,6 +23,14 @@ class Sitio(models.Model):
         return sitio_unico.estado
 
     @staticmethod
+    def get_estado_str():
+        estado_actual = Sitio.get_estado()
+        for estado, estado_str in Sitio.ESTADO:
+            if estado == estado_actual:
+                return estado_str
+        return None
+
+    @staticmethod
     def abrir():
         sitio_unico, _ = Sitio.objects.get_or_create(id=1)
         sitio_unico.estado = Sitio.ABIERTO
@@ -34,6 +41,7 @@ class Sitio(models.Model):
         sitio_unico, _ = Sitio.objects.get_or_create(id=1)
         sitio_unico.estado = Sitio.CERRADO
         sitio_unico.save()
+
 
 class Usuario(models.Model):
     FUERA = 0

@@ -1,7 +1,7 @@
 # Django (hay que lanzarlo con manage.py telegram
 from django.conf import settings
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-from telegramapp.tasks import COMANDOS_TELEGARM_DISPONIBLES, start, error, mensaje
+from telegramapp.tasks import COMANDOS_TELEGARM_DISPONIBLES, start, error, mensaje, comandos_telegram
 import logging
 
 
@@ -17,6 +17,7 @@ bot = dp.bot  # para poder mandar mensajes
 
 # on different commands - answer in Telegram
 dp.add_handler(CommandHandler("start", start))
+dp.add_handler(CommandHandler(list(COMANDOS_TELEGARM_DISPONIBLES.keys()), comandos_telegram))
 
 # on noncommand i.e message - echo the message on Telegram
 dp.add_handler(MessageHandler(Filters.text, mensaje))

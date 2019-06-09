@@ -36,7 +36,7 @@ app.conf.beat_schedule = {
         # 'args': ("uno dos", '46167421'),
     },
     'expulsar-gente-noche': {
-        'task': 'cutreronte.tasks.expulsar_gente_noche',
+        'task': 'cutreronte.tasks.expulsar_todos',
         'schedule': crontab(hour="1", minute="0", day_of_week="*"),
     },
 }
