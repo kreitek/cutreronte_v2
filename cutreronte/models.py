@@ -68,6 +68,8 @@ def usuario_pre_save(sender, instance, **kwargs):
 def usuario_post_save(sender, instance, **kwargs):
     # comprobar lleno o vacio
     usuarios_dentro = Usuario.objects.filter(estado=Usuario.DENTRO).count()
+    if usuarios_dentro > 1:
+        return  # los cambios son entre 0 y 1, si hay mas de 1 persona dentro no hace falta commprobar mas
     sitio_estado = Sitio.get_estado()
     if sitio_estado == Sitio.ABIERTO and not usuarios_dentro:  # sitio abierto y sale ultimo usuario
         Sitio.cerrar()
