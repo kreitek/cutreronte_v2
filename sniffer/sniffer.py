@@ -113,8 +113,7 @@ class Sniffer:
         print("{} ha entrado".format(mac))
         if mac in self.macs_conocidas:
             usuario = Usuario.objects.filter(dispositivo=dispositivo).first()
-            usuario.estado = Usuario.DENTRO
-            usuario.save()
+            usuario.meter()
 
 
     def _registrar_salida(self, mac):
@@ -123,8 +122,7 @@ class Sniffer:
         print("{} ha salido".format(mac))
         if mac in self.macs_conocidas:
             usuario = Usuario.objects.filter(dispositivo=dispositivo).first()
-            usuario.estado = Usuario.FUERA
-            usuario.save()
+            usuario.sacar()
 
 
     def _vaciar_redis(self):

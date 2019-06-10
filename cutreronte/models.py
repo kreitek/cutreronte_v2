@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
+from telegramapp.models import GrupoTelegram
 from telegramapp.utils import cutretelegram_enviar_mensaje
 
 
@@ -35,12 +36,21 @@ class Sitio(models.Model):
         sitio_unico, _ = Sitio.objects.get_or_create(id=1)
         sitio_unico.estado = Sitio.ABIERTO
         sitio_unico.save()
+        Sitio.notificar_estado("Espacio abierto")
 
     @staticmethod
     def cerrar():
         sitio_unico, _ = Sitio.objects.get_or_create(id=1)
         sitio_unico.estado = Sitio.CERRADO
         sitio_unico.save()
+        Sitio.notificar_estado("Espacio cerrado")
+
+    @staticmethod
+    def notificar_estado(mensaje_a_enviar):
+        grupos_telegram = GrupoTelegram.objects.filter(notificar_estado=True)
+        for grupo in grupos_telegram:
+            cutretelegram_enviar_mensaje(mensaje_a_enviar, grupo.id_grupo)
+        print(mensaje_a_enviar)
 
 
 class Usuario(models.Model):
@@ -63,6 +73,23 @@ class Usuario(models.Model):
     def __str__(self):
         return self.username
 
+    def sacar(self):
+        self.estado = Usuario.FUERA
+        self.save()
+        self.notificar_cambio("ha salido")
+
+    def meter(self):
+        self.estado = Usuario.DENTRO
+        self.save()
+        self.notificar_cambio("ha entrado")
+
+    def notificar_cambio(self, msg):
+        mensaje_a_enviar = "{} ({}) {}".format(self.username, self.usuario_telegram, msg)
+        grupos_telegram = GrupoTelegram.objects.filter(notificar_cambios=True)
+        for grupo in grupos_telegram:
+            cutretelegram_enviar_mensaje(mensaje_a_enviar, grupo.id_grupo)
+        print(mensaje_a_enviar)
+
 
 @receiver(pre_save, sender=Usuario)
 def usuario_pre_save(sender, instance, **kwargs):
@@ -81,12 +108,8 @@ def usuario_post_save(sender, instance, **kwargs):
     sitio_estado = Sitio.get_estado()
     if sitio_estado == Sitio.ABIERTO and not usuarios_dentro:  # sitio abierto y sale ultimo usuario
         Sitio.cerrar()
-        cutretelegram_enviar_mensaje("Espacio cerrado", settings.TELEGRAM_GRUPO_GENERAL)
-        print("Espacio cerrado")
     elif sitio_estado == Sitio.CERRADO and usuarios_dentro:  # sitio cerrado y entra alguien
         Sitio.abrir()
-        cutretelegram_enviar_mensaje("Espacio abierto", settings.TELEGRAM_GRUPO_GENERAL)
-        print("Espacio abierto")
 
 
 class Dispositivo(models.Model):
