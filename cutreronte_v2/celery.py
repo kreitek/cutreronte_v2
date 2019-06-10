@@ -31,7 +31,7 @@ def debug_task(self):
 
 app.conf.beat_schedule = {
     'borrar-registro-macs-antiguas': {
-        'task': 'apirest.tasks.borrar_registros_antiguos',
+        'task': 'sniffer.tasks.borrar_registros_antiguos',
         'schedule': crontab(hour="4", minute="0", day_of_week="*"),
         # 'args': ("uno dos", '46167421'),
     },
