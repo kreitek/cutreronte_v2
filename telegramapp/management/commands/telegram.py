@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from cutreronte_v2 import telegram
+from telegramapp import telegram
 
 
 class Command(BaseCommand):

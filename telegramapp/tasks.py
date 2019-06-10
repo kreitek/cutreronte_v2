@@ -1,12 +1,14 @@
 from django.urls import reverse
 from django.conf import settings
 from datetime import datetime
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup # https://python-telegram-bot.readthedocs.io/en/stable/
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup  # https://python-telegram-bot.readthedocs.io/en/stable/
 import json
 import re
 import logging
 
 from cutreronte.models import Usuario, Sitio
+from cutreronte.tasks import expulsar_todos
+from .models import GrupoTelegram
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +18,7 @@ def reverse_no_i18n(viewname, *args, **kwargs):
     result = reverse(viewname, *args, **kwargs)
     m = re.match(r'(/[^/]*)(/.*$)', result)
     return m.groups()[1]
+
 
 def comandos_telegram(bot, update):
     """ Todos los comandos llegan aqui (menos start), verifica que este autentificado y lanza comando correspondiente """
@@ -41,15 +44,19 @@ def error(bot, update, error):
     """Log Errors caused by Updates."""
     logger.error('Update "{}" caused error "{}"'.format(update, error))
 
+
 def mensaje(bot, update):
     """ mensaje estandar (no es comando)."""
     update.message.reply_text(update.message.text)
 
+
 def prueba(update, user):
     update.message.reply_text("texto de prueba")
 
+
 def status(update, user):
     update.message.reply_text("Hangar 3 {}".format(Sitio.get_estado_str()))
+
 
 def users_in(update, user):
     gente_dentro = Usuario.objects.filter(estado=Usuario.DENTRO)
@@ -59,19 +66,32 @@ def users_in(update, user):
         gente_dentro_comas = ",".join(str(usuario.username) for usuario in gente_dentro)
         update.message.reply_text("Estan dentro: {}".format(gente_dentro_comas))
 
+
+def atpc(update, user):
+    if GrupoTelegram.esta_autorizado_expulsar(update.message.from_user.id):
+        gente_dentro = expulsar_todos(notificar_telegram=False)
+        if gente_dentro:
+            update.message.reply_text("'{}' > ATPC".format(gente_dentro))
+        else:
+            update.message.reply_text("Nadie dentro")
+    else:
+        update.message.reply_text("Este usuario o grupo no esta autorizado para esta accion")
+
+
 def ayuda(update, user):
     """Send a message when the command /help is issued."""
     respuesta = ""
     for key in COMANDOS_TELEGARM_DISPONIBLES.keys():
         if COMANDOS_TELEGARM_DISPONIBLES[key][1]:
             respuesta += "/{}\t{}\n".format(key, COMANDOS_TELEGARM_DISPONIBLES[key][1])
-    print(respuesta)
     update.message.reply_text(respuesta[:-1])
+
 
 # comando como key, y tupla con funcion y descripcion. Si no tiene descripcion, no se lista en ayuda
 COMANDOS_TELEGARM_DISPONIBLES = {
     'status': (status, "Estado del espacio (abierto o cerrado)"),
     'users_in': (users_in, "Usuarios actualmente en el espacio"),
+    'ATPC': (atpc, "Expulsa a todos los usuarios"),
     'prueba': (prueba, None),
     'help': (ayuda, None),
     'ayuda': (ayuda, "Muestra esta ayuda"),

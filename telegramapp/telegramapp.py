@@ -1,7 +1,7 @@
 # Django (hay que lanzarlo con manage.py telegram
 from django.conf import settings
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
-from telegramapp.tasks import COMANDOS_TELEGARM_DISPONIBLES, start, error, mensaje, comandos_telegram
+from .tasks import COMANDOS_TELEGARM_DISPONIBLES, start, error, mensaje, comandos_telegram
 import logging
 
 

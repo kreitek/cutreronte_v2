@@ -10,3 +10,10 @@ class GrupoTelegram(models.Model):
 
     def __str__(self):
         return self.nombre
+
+    @staticmethod
+    def esta_autorizado_expulsar(id):
+        tg = GrupoTelegram.objects.filter(id_grupo=id, permite_expulsar=True)
+        if tg:
+            return True
+        return False
