@@ -1,15 +1,11 @@
 import threading
-
 from django.conf import settings
-
-from apirest.models import RegistroMac
 from cutreronte.models import Dispositivo, Usuario
-
+from sniffer.models import RegistroMac
 import json
 import redis
 import serial
 import time
-
 
 
 SENAL_ENTRADA = 20
