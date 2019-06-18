@@ -6,15 +6,13 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-Django = ">=2"
+django = "*"
 django-crispy-forms = "*"
 djangorestframework = "*"
-python-telegram-bot = ">=7.0.1"
-celery = "*"
 redis = "*"
-gunicorn = "*"
-psycopg2-binary = "*"
+celery = "*"
 pyserial = "*"
+python-telegram-bot = "*"
 
 [requires]
 python_version = "3.5"

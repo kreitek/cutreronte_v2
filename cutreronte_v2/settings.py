@@ -116,13 +116,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -130,7 +126,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
 
 
 # CELERY CONFIGURATION
@@ -147,7 +142,7 @@ CELERY_TASK_DEFAULT_QUEUE = 'priority.high'
 
 
 # TELEGRAM
-TELEGRAM_TOKEN = "612990444:AAHG8A7NdpuBgnPKFCMhK19CmXwKMxw4qEs"  # Sobreescribir en local_settings
+TELEGRAM_TOKEN = "0000000:xxxxxxxxxxxxxx"  # Sobreescribir en local_settings
 
 SNIFFER_SERIE_PUERTO = "/dev/ttyUSB0"
 SNIFFER_SERIE_BAUDRATE = 115200

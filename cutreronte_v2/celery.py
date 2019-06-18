@@ -5,7 +5,7 @@ from celery.task.schedules import crontab
 
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'olive_oyster.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cutreronte_v2.settings')
 app = Celery('cutreronte_v2', backend='redis://localhost')
 
 # Using a string here means the worker will not have to
@@ -26,7 +26,7 @@ def debug_task(self):
 
 # @periodic_task(run_every=crontab(hour="*", minute="*", day_of_week="*"))
 # def notificar_resumen_noche():
-#     # from olive_oyster.telegram import bot
+#     # from cutreronte_v2.telegram import bot
 #     print("hola")
 
 app.conf.beat_schedule = {
