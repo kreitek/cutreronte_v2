@@ -63,7 +63,7 @@ def users_in(update, user):
     if not gente_dentro:
         update.message.reply_text("Nadie dentro")
     else:
-        gente_dentro_comas = ",".join(str(usuario.username) for usuario in gente_dentro)
+        gente_dentro_comas = ", ".join(str(usuario.username) for usuario in gente_dentro)
         update.message.reply_text("Estan dentro: {}".format(gente_dentro_comas))
 
 
