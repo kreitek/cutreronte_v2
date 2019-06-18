@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from telegramapp import telegram
+from telegramapp import telegramapp
 
 
 class Command(BaseCommand):
@@ -8,7 +8,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         print("Servicio Telegram iniciado")
         try:
-            telegram.updater.idle()
+            telegramapp.updater.idle()
         except KeyboardInterrupt:
             print("Servicio Telegram detenido")
             quit(0)
