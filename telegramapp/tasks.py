@@ -32,7 +32,7 @@ def comandos_telegram(bot, update):
     # no tiene offset, si el comando no va al principio, no salta el callback
     commando_length = int(update.message.entities[0].length)
     comando = update.message.text[1:commando_length]
-    COMANDOS_TELEGARM_DISPONIBLES[comando][0](update, user)
+    COMANDOS_TELEGARM_DISPONIBLES[comando.lower()][0](update, user)
 
 
 def start(bot, update):
@@ -47,7 +47,8 @@ def error(bot, update, error):
 
 def mensaje(bot, update):
     """ mensaje estandar (no es comando)."""
-    update.message.reply_text(update.message.text)
+    # update.message.reply_text(update.message.text)
+    pass
 
 
 def prueba(update, user):
@@ -88,10 +89,11 @@ def ayuda(update, user):
 
 
 # comando como key, y tupla con funcion y descripcion. Si no tiene descripcion, no se lista en ayuda
+# keys siempre en minuscula
 COMANDOS_TELEGARM_DISPONIBLES = {
     'status': (status, "Estado del espacio (abierto o cerrado)"),
     'users_in': (users_in, "Usuarios actualmente en el espacio"),
-    'ATPC': (atpc, "Expulsa a todos los usuarios"),
+    'atpc': (atpc, "Expulsa a todos los usuarios"),
     'prueba': (prueba, None),
     'help': (ayuda, None),
     'ayuda': (ayuda, "Muestra esta ayuda"),

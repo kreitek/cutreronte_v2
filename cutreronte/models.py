@@ -74,14 +74,16 @@ class Usuario(models.Model):
         return self.username
 
     def sacar(self):
-        self.estado = Usuario.FUERA
-        self.save()
-        self.notificar_cambio("ha salido")
+        if self.estado == Usuario.DENTRO:
+            self.estado = Usuario.FUERA
+            self.save()
+            self.notificar_cambio("ha salido")
 
     def meter(self):
-        self.estado = Usuario.DENTRO
-        self.save()
-        self.notificar_cambio("ha entrado")
+        if self.estado == Usuario.FUERA:
+            self.estado = Usuario.DENTRO
+            self.save()
+            self.notificar_cambio("ha entrado")
 
     def notificar_cambio(self, msg):
         mensaje_a_enviar = "{} ({}) {}".format(self.username, self.usuario_telegram, msg)

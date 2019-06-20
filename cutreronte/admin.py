@@ -38,11 +38,13 @@ class UsuarioAdmin(admin.ModelAdmin):
 
 @admin.register(Dispositivo)
 class DispositivoAdmin(admin.ModelAdmin):
-    list_display = ['mac', 'usuario', ]
-    search_fields = ['mac', ]
+    list_display = ['mac', 'usuario', 'dispositivo', ]
+    search_fields = ['mac', 'dispositivo', ]
+    ordering = ["-last_seen", ]
 
 
 @admin.register(Rfid)
 class RfidAdmin(admin.ModelAdmin):
     list_display = ['rfid', 'usuario', ]
     search_fields = ['rfid', ]
+    ordering = ["-last_seen", ]
