@@ -38,8 +38,8 @@ class UsuarioAdmin(admin.ModelAdmin):
 
 @admin.register(Dispositivo)
 class DispositivoAdmin(admin.ModelAdmin):
-    list_display = ['mac', 'usuario', 'dispositivo', ]
-    search_fields = ['mac', 'dispositivo', ]
+    list_display = ['mac', 'usuario', 'fabricante', ]
+    search_fields = ['mac', 'fabricante', 'dispositivo', ]
     ordering = ["-last_seen", ]
 
 

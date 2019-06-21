@@ -1,3 +1,4 @@
+import os
 import threading
 from django.conf import settings
 from cutreronte.models import Dispositivo, Usuario
@@ -13,6 +14,23 @@ SENAL_ENTRADA = 20
 class SITUACION:
     DENTRO = 1
     FUERA = 0
+
+
+def buscar_oiu(prefijo):
+    prefijo = str(prefijo)
+    if len(prefijo) < 8:
+        return ""
+    prefijo = prefijo[:8].upper()
+    with open(os.path.join(settings.BASE_DIR, "oui.txt"), 'r') as oui_file:
+        for line in oui_file.readlines():
+            if line.startswith(prefijo):
+                partes = line.split("\t")
+                try:
+                    salida = partes[2].strip()
+                except IndexError:
+                    salida = partes[1].strip()
+                return salida
+    return ""
 
 
 class Sniffer:
@@ -102,6 +120,10 @@ class Sniffer:
 
     def _registrar_entrada(self, mac):
         dispositivo, es_nuevo = Dispositivo.objects.get_or_create(mac=mac)
+        if es_nuevo:
+            fabricante = buscar_oiu(mac)
+            dispositivo.fabricante = fabricante
+            dispositivo.save()
         RegistroMac.objects.create(dispositivo=dispositivo, estado=RegistroMac.DENTRO)
         print("{} ha entrado".format(mac))
         if mac in self.macs_conocidas:

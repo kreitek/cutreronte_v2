@@ -118,6 +118,7 @@ class Dispositivo(models.Model):
     mac = models.CharField(max_length=50, blank=False, null=False, unique=True)
     dispositivo = models.CharField(max_length=50, blank=True, null=True, unique=False
                                    , help_text="Nombre del dispositivo (modelo de telefono), portatil...")
+    fabricante = models.CharField(max_length=300, blank=True, null=True, unique=False, default="")
     usuario = models.ForeignKey(Usuario, blank=True, null=True, on_delete=models.SET_NULL)
     created = models.DateTimeField(auto_now_add=True)
     last_seen = models.DateTimeField(auto_now=True)
