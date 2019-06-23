@@ -10,14 +10,20 @@ from sniffer.models import RegistroMac
 
 @login_required
 def sniffer1(request):
-    # registros = RegistroMac.objects.all()
+    if request.POST:
+        fecha = request.POST.get('fecha')
+        print(fecha)
+    else:
+        fecha = timezone.datetime.now().strftime("%m/%d/%Y") #  06/14/2019
+    mes, dia, anyo = fecha.split("/")
     detectados = []
 
     for dispositivo in Dispositivo.objects.filter(usuario__isnull=True, equipo__isnull=True):  # solo anonimos
         # print("-----")
         estado_anterior = RegistroMac.FUERA
         tiempo_anterior = timezone.datetime.strptime('01/01/2019', "%m/%d/%Y")
-        for registro in RegistroMac.objects.filter(dispositivo=dispositivo).order_by('tiempo'):
+        for registro in RegistroMac.objects.filter(dispositivo=dispositivo, tiempo__year=anyo,
+                      tiempo__month=mes, tiempo__day=dia).order_by('tiempo'):
             estado = registro.estado
             tiempo = registro.tiempo
             # print("{}\t{}\t{}".format(registro, estado, tiempo))
@@ -26,10 +32,11 @@ def sniffer1(request):
                 if tiempo_dentro > timezone.timedelta(seconds=settings.SNIFFER_TIMEOUT_SENAL * 2):
                     # print("=====> {}\t{}".format(tiempo_dentro, registro))
                     # detectados.append((registro, tiempo_dentro, tiempo))
+                    tiempo_dentro = tiempo_dentro - timezone.timedelta(microseconds=tiempo_dentro.microseconds)
                     detectados.append({"dispositivo_id": dispositivo.id,
                                        "mac": dispositivo.mac,
                                        "fabricante": dispositivo.fabricante,
-                                       "tiempo_dentro": tiempo_dentro,
+                                       "tiempo_dentro": tiempo_dentro,  # timedelta
                                        "hora_salida": tiempo,
                                        "hora_entrada": tiempo_anterior,
                                        })
@@ -38,8 +45,8 @@ def sniffer1(request):
 
     # detectados.sort(key=operator.itemgetter(1), reverse=True)
     detectados.sort(key=operator.itemgetter("tiempo_dentro"), reverse=True)
-
     context = {
+        'fecha': fecha,
         'detectados': detectados,
     }
     return render(request, 'sniffer/sniffer.html', context)

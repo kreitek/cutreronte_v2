@@ -3,6 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Sniffer</title>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $("#datepicker").datepicker();
+            $.datepicker.setDefaults($.datepicker.regional["es"]);
+            $("#datepicker").change(() => {
+                $("#formfecha").submit();
+            });
+        });
+    </script>
 </head>
 <body>
 
@@ -17,19 +35,42 @@
 </ul>
 {% endcomment %}
 
-    <table border="1">
-        {% for detectado in detectados %}
+<form id="formfecha" action="" method='POST'> {% csrf_token %}
+    <label for="datepicker" id="datepickerlabel">Fecha:</label>
+    <input type="text" name="fecha" id="datepicker" class="form-control" value="{{ fecha }}">
+{#    <button type="submit" class="btn btn-primary">Buscar</button>  submit directamente al cambiar valor#}
+</form>
+
+<div class="container">
+<table  class="table">
+    <thead>
+      <tr>
+        <th>MAC</th>
+        <th>Fabricante</th>
+        <th>Entrada</th>
+        <th>Salida</th>
+        <th>Tiempo</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for detectado in detectados %}
         <tr>
-            <td><a href="{% url 'admin:cutreronte_dispositivo_change' detectado.dispositivo_id %}">{{ detectado.mac }}</a></td>
+            <td>
+                <a href="{% url 'admin:cutreronte_dispositivo_change' detectado.dispositivo_id %}">{{ detectado.mac }}</a>
+            </td>
             <td>{{ detectado.fabricante }}</td>
             <td>{{ detectado.hora_entrada | date:"G:i" }}</td>
             <td>{{ detectado.hora_salida | date:"G:i" }}</td>
-            <td>{{ detectado.tiempo_dentro | date:"G:i:s"  }}</td>
+            <td>{{ detectado.tiempo_dentro}}</td>
         </tr>
-        {% empty %}
-            <tr><td>No hay registros</td></tr>
-        {% endfor %}
-    </table>
+    {% empty %}
+        <tr>
+            <td>No hay registros</td>
+        </tr>
+    {% endfor %}
+    </tbody>
 
+</table>
+</div>
 </body>
 </html>
