@@ -114,12 +114,22 @@ def usuario_post_save(sender, instance, **kwargs):
         Sitio.abrir()
 
 
+class Equipo(models.Model):
+    nombre = models.CharField(max_length=100, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    last_seen = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.nombre
+
+
 class Dispositivo(models.Model):
     mac = models.CharField(max_length=50, blank=False, null=False, unique=True)
     dispositivo = models.CharField(max_length=50, blank=True, null=True, unique=False
                                    , help_text="Nombre del dispositivo (modelo de telefono), portatil...")
     fabricante = models.CharField(max_length=300, blank=True, null=True, unique=False, default="")
     usuario = models.ForeignKey(Usuario, blank=True, null=True, on_delete=models.SET_NULL)
+    equipo = models.ForeignKey(Equipo, on_delete=models.SET_NULL, null=True, )
     created = models.DateTimeField(auto_now_add=True)
     last_seen = models.DateTimeField(auto_now=True)
 
@@ -142,3 +152,4 @@ class Rfid(models.Model):
         else:
             u = "sin usuario asignado"
         return "{} ({})".format(self.rfid, u)
+

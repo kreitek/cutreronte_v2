@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sniffer</title>
+</head>
+<body>
+
+{%  comment %}
+<ul>
+{% for registro in registros %}
+    <li>{{ registro.dispositivo }} - {{ registro.tiempo }} - {{ registro.estado }}</li>
+{% endfor %}
+    {% for detectado in detectados %}
+        <li>{{ detectado.registro }} - {{ detectado.tiempo_dentro }} - {{ detectado.tiempo }}</li>
+    {% endfor %}
+</ul>
+{% endcomment %}
+
+    <table border="1">
+        {% for detectado in detectados %}
+        <tr>
+            <td><a href="{% url 'admin:cutreronte_dispositivo_change' detectado.dispositivo_id %}">{{ detectado.mac }}</a></td>
+            <td>{{ detectado.fabricante }}</td>
+            <td>{{ detectado.hora_entrada | date:"G:i" }}</td>
+            <td>{{ detectado.hora_salida | date:"G:i" }}</td>
+            <td>{{ detectado.tiempo_dentro | date:"G:i:s"  }}</td>
+        </tr>
+        {% empty %}
+            <tr><td>No hay registros</td></tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>

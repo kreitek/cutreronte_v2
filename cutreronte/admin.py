@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db.models import Count
 
-from .models import Dispositivo, Rfid, Usuario
+from .models import Dispositivo, Rfid, Usuario, Equipo
 
 
 class RfidInline(admin.TabularInline):
@@ -24,6 +24,7 @@ class DispositivoInline(admin.TabularInline):
 class UsuarioAdmin(admin.ModelAdmin):
     list_display = ['username', 'estado', 'last_seen', 'n_rfids', 'n_dispositivos', ]
     list_filter = ['estado']
+    search_fields = ['username', ]
     ordering = ["-last_seen", ]
     inlines = [RfidInline, DispositivoInline]
 
@@ -38,7 +39,7 @@ class UsuarioAdmin(admin.ModelAdmin):
 
 @admin.register(Dispositivo)
 class DispositivoAdmin(admin.ModelAdmin):
-    list_display = ['mac', 'usuario', 'fabricante', ]
+    list_display = ['mac', 'usuario', 'equipo', 'fabricante', ]
     search_fields = ['mac', 'fabricante', 'dispositivo', ]
     ordering = ["-last_seen", ]
 
@@ -48,3 +49,11 @@ class RfidAdmin(admin.ModelAdmin):
     list_display = ['rfid', 'usuario', ]
     search_fields = ['rfid', ]
     ordering = ["-last_seen", ]
+
+
+@admin.register(Equipo)
+class EquipoAdmin(admin.ModelAdmin):
+    list_display = ['nombre',]
+    search_fields = ['nombre', ]
+    ordering = ["-last_seen", ]
+    inlines = [DispositivoInline, ]
