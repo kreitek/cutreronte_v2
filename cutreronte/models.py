@@ -34,16 +34,18 @@ class Sitio(models.Model):
     @staticmethod
     def abrir():
         sitio_unico, _ = Sitio.objects.get_or_create(id=1)
-        sitio_unico.estado = Sitio.ABIERTO
-        sitio_unico.save()
-        Sitio.notificar_estado("Espacio abierto")
+        if sitio_unico.estado is not Sitio.ABIERTO:
+            sitio_unico.estado = Sitio.ABIERTO
+            sitio_unico.save()
+            Sitio.notificar_estado("Espacio abierto")
 
     @staticmethod
     def cerrar():
         sitio_unico, _ = Sitio.objects.get_or_create(id=1)
-        sitio_unico.estado = Sitio.CERRADO
-        sitio_unico.save()
-        Sitio.notificar_estado("Espacio cerrado")
+        if sitio_unico.estado is not Sitio.CERRADO:
+            sitio_unico.estado = Sitio.CERRADO
+            sitio_unico.save()
+            Sitio.notificar_estado("Espacio cerrado")
 
     @staticmethod
     def notificar_estado(mensaje_a_enviar):
