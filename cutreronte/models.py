@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
@@ -52,7 +51,6 @@ class Sitio(models.Model):
         grupos_telegram = GrupoTelegram.objects.filter(notificar_estado=True)
         for grupo in grupos_telegram:
             cutretelegram_enviar_mensaje(mensaje_a_enviar, grupo.id_grupo)
-        print(mensaje_a_enviar)
 
 
 class Usuario(models.Model):
@@ -127,8 +125,8 @@ class Equipo(models.Model):
 
 class Dispositivo(models.Model):
     mac = models.CharField(max_length=50, blank=False, null=False, unique=True)
-    dispositivo = models.CharField(max_length=50, blank=True, null=True, unique=False
-                                   , help_text="Nombre del dispositivo (modelo de telefono), portatil...")
+    dispositivo = models.CharField(max_length=50, blank=True, null=True, unique=False,
+                                   help_text="Nombre del dispositivo (modelo de telefono), portatil...")
     fabricante = models.CharField(max_length=300, blank=True, null=True, unique=False, default="")
     usuario = models.ForeignKey(Usuario, blank=True, null=True, on_delete=models.SET_NULL)
     equipo = models.ForeignKey(Equipo, on_delete=models.SET_NULL, null=True, )
@@ -154,4 +152,3 @@ class Rfid(models.Model):
         else:
             u = "sin usuario asignado"
         return "{} ({})".format(self.rfid, u)
-

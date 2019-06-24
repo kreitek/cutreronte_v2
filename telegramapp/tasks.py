@@ -30,9 +30,14 @@ def comandos_telegram(bot, update):
     user = None
     # comando_offset = int(update.message.entities[0].offset)
     # no tiene offset, si el comando no va al principio, no salta el callback
-    commando_length = int(update.message.entities[0].length)
-    comando = update.message.text[1:commando_length]
-    COMANDOS_TELEGARM_DISPONIBLES[comando.lower()][0](update, user)
+    # commando_length = int(update.message.entities[0].length)
+    # comando = update.message.text[1:commando_length]
+    # COMANDOS_TELEGARM_DISPONIBLES[comando.lower()][0](update, user)
+    comando_raw = update.message.text[1:].lower()
+    for key in COMANDOS_TELEGARM_DISPONIBLES.keys():
+        if comando_raw.startswith(key.lower()):
+            COMANDOS_TELEGARM_DISPONIBLES[key.lower()][0](update, user)
+            break
 
 
 def start(bot, update):

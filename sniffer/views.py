@@ -33,11 +33,12 @@ def sniffer1(request):
                     # print("=====> {}\t{}".format(tiempo_dentro, registro))
                     # detectados.append((registro, tiempo_dentro, tiempo))
                     tiempo_dentro = tiempo_dentro - timezone.timedelta(microseconds=tiempo_dentro.microseconds)
+                    hora_salida = tiempo - timezone.timedelta(seconds=settings.SNIFFER_TIMEOUT_SENAL)
                     detectados.append({"dispositivo_id": dispositivo.id,
                                        "mac": dispositivo.mac,
                                        "fabricante": dispositivo.fabricante,
                                        "tiempo_dentro": tiempo_dentro,  # timedelta
-                                       "hora_salida": tiempo,
+                                       "hora_salida": hora_salida,
                                        "hora_entrada": tiempo_anterior,
                                        })
             estado_anterior = estado
